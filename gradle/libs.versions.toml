@@ -13,6 +13,8 @@ kotlinPoet = "2.2.0"
 arrow = "2.2.1.1"
 autoService = "1.1.1"
 autoServiceKsp = "1.2.0"
+junit = "6.0.1"
+kotlinCompileTesting = "0.12.0"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -27,6 +29,12 @@ arrow = { module = "io.arrow-kt:arrow-core-jvm", version.ref = "arrow" }
 
 autoServiceAnnotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoService" }
 autoServiceKsp = { module = "dev.zacsweers.autoservice:auto-service-ksp", version.ref = "autoServiceKsp" }
+
+junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+kotlinCompileTestingKsp = { module = "dev.zacsweers.kctfork:ksp", version.ref = "kotlinCompileTesting" }
+kotlinCompileTestingCore = { module = "dev.zacsweers.kctfork:core", version.ref = "kotlinCompileTesting" }
 
 # Libraries can be bundled together for easier import
 [bundles]

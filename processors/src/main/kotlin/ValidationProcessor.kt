@@ -20,6 +20,10 @@ class ValidationProcessor(
         val symbols = resolver.getSymbolsWithAnnotation(AtLeastOnePresent::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()
 
+        when (symbols.count()) {
+            0 -> return emptyList()
+        }
+
         val sourceFiles = ArrayList<KSFile>()
         val fileSpecBuilder = FileSpec.builder(
             options["ez-validator.package"] ?: "xyz.uthofficial.ksp.ezvalidator",
@@ -79,7 +83,7 @@ class ValidationProcessor(
                 // Add the parameters extracted from the original one.
                 .addParameters(parameterSpecs)
                 .addStatement("val isAnyPresent = $conditionCode")
-                .beginControlFlow("if (!isAnySet)")
+                .beginControlFlow("if (!isAnyPresent)")
                 // Expected (at least) 1, found 0.
                 .addStatement(
                     """return %T.Left(%T(%L, %L))""",

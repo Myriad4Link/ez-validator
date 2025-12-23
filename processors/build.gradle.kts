@@ -15,4 +15,14 @@ dependencies {
 
     implementation(project(":annotations"))
     implementation(project(":errors"))
+
+    testImplementation(libs.junitJupiterApi)
+    testRuntimeOnly(libs.junitJupiterEngine)
+    testRuntimeOnly(libs.junitPlatformLauncher)
+    testImplementation(libs.kotlinCompileTestingKsp)
+    testImplementation(libs.kotlinCompileTestingCore)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
