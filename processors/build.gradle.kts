@@ -1,5 +1,6 @@
 plugins {
     id("buildsrc.convention.kotlin-jvm")
+    alias(libs.plugins.ksp)
 }
 
 group = "xyz.uthofficial"
@@ -8,6 +9,9 @@ version = "unspecified"
 dependencies {
     implementation(libs.bundles.kotlinPoetWithKsp)
     implementation(libs.arrow)
+
+    compileOnly(libs.autoServiceAnnotations)
+    ksp(libs.autoServiceKsp)
 
     implementation(project(":annotations"))
     implementation(project(":errors"))
