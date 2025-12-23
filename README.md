@@ -1,3 +1,19 @@
 # ez-validator
 
-This is a Kotlin library that provides easy validation mechanism for data classes that utilise Option<T> in [Arrow](https://github.com/arrow-kt/arrow) through annotations and source-code generations that provides minimum overhead.
+`ez-validator` is a validator suite designed for Kotlin data classes that utilize [Arrow](https://github.com/arrow-kt/arrow), specifically `Option<T>`. It uses annotations and code generation to verify that your data meets specific criteria with minimal runtime overhead.
+
+> [!WARNING]
+> **This project is in a very early development stage.**
+
+## Roadmap
+
+### Validation Support
+- [x] `AtLeastOnePresent`
+- [ ] `AtMost`
+- [ ] `NotEmpty`
+- [ ] ... and more
+
+### Feature Support
+- [ ] `autoRetry`
+- [ ] `onValidationFailed`
+- [ ] ... and more
