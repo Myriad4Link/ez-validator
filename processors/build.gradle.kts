@@ -21,8 +21,15 @@ dependencies {
     testRuntimeOnly(libs.junitPlatformLauncher)
     testImplementation(libs.kotlinCompileTestingKsp)
     testImplementation(libs.kotlinCompileTestingCore)
+    testImplementation(libs.mockk)
 }
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
+    jvmArgs("-Djdk.instrument.traceUsage=true")
+
+    val tmpDir = layout.buildDirectory.dir("tmp")
+    systemProperty("java.io.tmpdir", tmpDir.map { it.asFile.absolutePath }.get())
+    doFirst { tmpDir.get().asFile.mkdirs() }
 }

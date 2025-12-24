@@ -9,15 +9,13 @@ import org.junit.jupiter.api.Test
 
 @Suppress("RedundantInterpolationPrefix")
 @OptIn(ExperimentalCompilerApi::class)
-class AtLeastOnePresentValidationTest {
+class ValidationIntegrationTest {
     private fun compile(vararg source: SourceFile, options: Map<String, String> = emptyMap()): JvmCompilationResult {
-        return KotlinCompilation().apply {
-            sources = source.toList()
-            useKsp2()
-            symbolProcessorProviders = mutableListOf(ValidationProcessorProvider())
-            kspProcessorOptions = options.toMutableMap()
-            inheritClassPath = true
-        }.compile()
+        return CompilationUtils.compile(
+            *source,
+            options = options,
+            symbolProcessorProviders = listOf(ValidationProcessorProvider())
+        )
     }
 
     @Test

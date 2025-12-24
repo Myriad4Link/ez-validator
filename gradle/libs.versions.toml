@@ -15,6 +15,7 @@ autoService = "1.1.1"
 autoServiceKsp = "1.2.0"
 junit = "6.0.1"
 kotlinCompileTesting = "0.12.0"
+mockk = "1.14.7"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -35,6 +36,7 @@ junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", versio
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 kotlinCompileTestingKsp = { module = "dev.zacsweers.kctfork:ksp", version.ref = "kotlinCompileTesting" }
 kotlinCompileTestingCore = { module = "dev.zacsweers.kctfork:core", version.ref = "kotlinCompileTesting" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 # Libraries can be bundled together for easier import
 [bundles]
