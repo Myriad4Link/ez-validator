@@ -3,17 +3,12 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.squareup.kotlinpoet.FunSpec
-import com.tschuchort.compiletesting.KotlinCompilation
-import com.tschuchort.compiletesting.SourceFile
-import com.tschuchort.compiletesting.symbolProcessorProviders
-import com.tschuchort.compiletesting.useKsp2
-import handlers.AtLeastOnePresentHandler
+import com.tschuchort.compiletesting.*
 import handlers.ValidationHandler
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
 fun createTestSourceFile(filename: String, content: String): SourceFile =
     SourceFile.kotlin(filename, content, true)
-
 
 fun createTestSourceFile(filename: String, vararg parameters: String) =
     createTestSourceFile(
@@ -25,39 +20,43 @@ fun createTestSourceFile(filename: String, vararg parameters: String) =
     """.trimIndent()
     )
 
-class ProcessorResultRef {
-    var value: Result<FunSpec>? = null
-}
+@OptIn(ExperimentalCompilerApi::class)
+class HandlerCompilationContext(
+    val sourceFiles: List<SourceFile>,
+    val targetClassName: String = "xyz.uthofficial.tests.Test"
+) {
+    private var handlerResult: Result<FunSpec>? = null
 
-fun createHandlerSpecificProcessorProvider(
-    handler: AtLeastOnePresentHandler
-): Pair<SymbolProcessorProvider, ProcessorResultRef> {
-
-    val holder = ProcessorResultRef()
-
-    val provider = SymbolProcessorProvider {
-        object: SymbolProcessor {
-            override fun process(resolver: Resolver): List<KSAnnotated> {
-                holder.value = handler.process(
-                    resolver.getClassDeclarationByName(
-                        resolver.getKSNameFromString("xyz.uthofficial.tests.Test")
-                    )!!
-                )
-                return emptyList()
+    fun compileWith(handler: ValidationHandler): HandlerCompilationResult {
+        val provider = SymbolProcessorProvider {
+            object : SymbolProcessor {
+                override fun process(resolver: Resolver): List<KSAnnotated> {
+                    resolver.getClassDeclarationByName(resolver.getKSNameFromString(targetClassName))?.let {
+                        handlerResult = handler.process(it)
+                    }
+                    return emptyList()
+                }
             }
         }
-    }
 
-    return provider to holder
+        val compilation = KotlinCompilation().apply {
+            useKsp2()
+            symbolProcessorProviders = mutableListOf(provider)
+            sources = sourceFiles
+            inheritClassPath = true
+        }
+
+        return HandlerCompilationResult(compilation.compile(), handlerResult)
+    }
 }
 
 @OptIn(ExperimentalCompilerApi::class)
-fun createCompilation(
-    sourceFiles: List<SourceFile>,
-    processorProviders: MutableList<SymbolProcessorProvider>
-) = KotlinCompilation().apply {
-    useKsp2()
-    symbolProcessorProviders = processorProviders
-    sources = sourceFiles
-    inheritClassPath = true
-}
+class HandlerCompilationResult(
+    val compilationResult: JvmCompilationResult,
+    val processorResult: Result<FunSpec>?
+)
+
+fun ValidationHandler.testWith(vararg sources: SourceFile, targetClass: String = "xyz.uthofficial.tests.Test") =
+    HandlerCompilationContext(sources.toList(), targetClass).compileWith(this)
+
+fun String.asSourceFile(name: String = "Test.kt") = SourceFile.kotlin(name, this, true)
