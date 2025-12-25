@@ -7,19 +7,6 @@ import com.tschuchort.compiletesting.*
 import handlers.ValidationHandler
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
-fun createTestSourceFile(filename: String, content: String): SourceFile =
-    SourceFile.kotlin(filename, content, true)
-
-fun createTestSourceFile(filename: String, vararg parameters: String) =
-    createTestSourceFile(
-        filename, """
-        package xyz.uthofficial.tests
-        import arrow.core.Option
-        
-        data class $filename(${parameters.joinToString(", ")})
-    """.trimIndent()
-    )
-
 @OptIn(ExperimentalCompilerApi::class)
 class HandlerCompilationContext(
     val sourceFiles: List<SourceFile>,
@@ -56,6 +43,7 @@ class HandlerCompilationResult(
     val processorResult: Result<FunSpec>?
 )
 
+@OptIn(ExperimentalCompilerApi::class)
 fun ValidationHandler.testWith(vararg sources: SourceFile, targetClass: String = "xyz.uthofficial.tests.Test") =
     HandlerCompilationContext(sources.toList(), targetClass).compileWith(this)
 
