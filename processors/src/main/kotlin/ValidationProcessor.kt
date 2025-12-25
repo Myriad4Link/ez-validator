@@ -33,16 +33,10 @@ class ValidationProcessor(
         }
 
         symbols.forEach { classDeclaration ->
-            val containingFile = classDeclaration.containingFile
-            when (containingFile) {
-                null -> return@forEach
-            }
+            val containingFile = classDeclaration.containingFile ?: return@forEach
 
             val applicableHandlers = handlers.filter { handler ->
                 classDeclaration.annotations.any { ann -> handler.canProcess(ann) }
-            }
-            when {
-                applicableHandlers.isEmpty() -> return@forEach
             }
 
             val targetConstructor = classDeclaration.primaryConstructor

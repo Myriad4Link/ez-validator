@@ -44,15 +44,30 @@ class AtLeastOnePresentHandlerTest : FunSpec({
         }
     }
 
-    test("should generate nothing when there are no Option parameters") {
-        val noOptionSource = """
+    test("should generate correct condition code when there are no Option parameters") {
+        val source = """
             package xyz.uthofficial.tests
             data class Test(val str: String, val num: Int)
         """.trimIndent().asSourceFile()
 
-        val result = handler.testWith(noOptionSource, targetClass = "xyz.uthofficial.tests.Test")
+        val result = handler.testWith(source, targetClass = "xyz.uthofficial.tests.Test")
         result.processorResult shouldNotBeNull {
             getOrThrow().toString() shouldContain "val isAnyPresent = true"
+        }
+    }
+
+    test("should generate correct condition code when there are mixed Option parameters") {
+        val source = """
+            package xyz.uthofficial.tests
+            import arrow.core.Option
+            
+            data class Test(val p0: Option<String>, val p1: Double, val p2: Option<Int>)
+        """.trimIndent().asSourceFile()
+
+        val result = handler.testWith(source, targetClass = "xyz.uthofficial.tests.Test")
+
+        result.processorResult.shouldNotBeNull {
+            getOrThrow().toString() shouldContain "val isAnyPresent = p0.isSome() || p2.isSome()"
         }
     }
 })
