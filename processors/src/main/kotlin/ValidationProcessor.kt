@@ -8,7 +8,7 @@ import handlers.ValidationHandler
 class ValidationProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val options: Map<String, String>,
+    private val fileGenerator: ValidatorFileGenerator,
     private val handlers: List<ValidationHandler> = listOf(AtLeastOnePresentHandler())
 ) : SymbolProcessor {
 
@@ -22,9 +22,6 @@ class ValidationProcessor(
             .distinct()
 
         if (!symbols.iterator().hasNext()) return emptyList()
-
-        val packageName = options["ez-validator.package"] ?: "xyz.uthofficial.ezvalidator.ksp"
-        val fileGenerator = ValidatorFileGenerator(packageName)
 
         symbols.forEach { classDeclaration ->
             val containingFile = classDeclaration.containingFile ?: return@forEach
