@@ -1,3 +1,4 @@
 @Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
+@Validator
 annotation class AtLeastOnePresent()
