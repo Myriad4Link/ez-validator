@@ -95,3 +95,15 @@ fun ValidatorFileGenerator.testWith(
 ) = GeneratorCompilationContext(sources.toList(), targetClass).compileWith(this, funSpecs)
 
 fun String.asSourceFile(name: String = "Test.kt") = SourceFile.kotlin(name, this, true)
+
+@OptIn(ExperimentalCompilerApi::class)
+fun compileWithProcessor(
+    vararg sources: SourceFile,
+    providers: List<SymbolProcessorProvider> = listOf(ValidationProcessorProvider())
+): JvmCompilationResult =
+    KotlinCompilation().apply {
+        useKsp2()
+        this.sources = sources.toList()
+        inheritClassPath = true
+        symbolProcessorProviders = providers.toMutableList()
+    }.compile()

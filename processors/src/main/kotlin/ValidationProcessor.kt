@@ -13,13 +13,16 @@ class ValidationProcessor(
 ) : SymbolProcessor {
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val symbols = resolver.getSymbolsWithAnnotation(Validator::class.qualifiedName!!)
+        val symbols = resolver.getNewFiles()
+            .flatMap { it.declarations }
             .filterIsInstance<KSClassDeclaration>()
-            .flatMap { annotation ->
-                annotation.qualifiedName?.asString()?.let { resolver.getSymbolsWithAnnotation(it) } ?: emptySequence()
+            .filter {
+                it.annotations.any { ann ->
+                    ann.annotationType.resolve().declaration.annotations.any { metaAnn ->
+                        metaAnn.annotationType.resolve().declaration.qualifiedName?.asString() == Validator::class.qualifiedName
+                    }
+                }
             }
-            .filterIsInstance<KSClassDeclaration>()
-            .distinct()
 
         if (!symbols.iterator().hasNext()) return emptyList()
 
@@ -27,9 +30,14 @@ class ValidationProcessor(
             val containingFile = classDeclaration.containingFile ?: return@forEach
 
             val targetConstructor = classDeclaration.primaryConstructor
-            if (targetConstructor == null) {
-                logger.error("Class ${classDeclaration.simpleName.asString()} must have a primary constructor", classDeclaration)
-                return@forEach
+            when (targetConstructor) {
+                null -> {
+                    logger.error(
+                        "Class ${classDeclaration.simpleName.asString()} must have a primary constructor",
+                        classDeclaration
+                    )
+                    return@forEach
+                }
             }
 
             val applicableHandlers = handlers.filter { handler ->

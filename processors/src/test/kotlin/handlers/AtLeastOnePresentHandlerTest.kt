@@ -70,4 +70,21 @@ class AtLeastOnePresentHandlerTest : FunSpec({
             getOrThrow().toString() shouldContain "val isAnyPresent = p0.isSome() || p2.isSome()"
         }
     }
+
+    test("should refuse to generate function when there is no primary constructor") {
+        val source = """
+            package xyz.uthofficial.tests
+            class Test {
+                constructor(p0: String)
+                constructor(p1: Int)
+            }
+        """.trimIndent().asSourceFile()
+
+        val result = handler.testWith(source)
+
+        result.processorResult.shouldNotBeNull {
+            isFailure shouldBe true
+            exceptionOrNull()?.message shouldContain "must have a primary constructor"
+        }
+    }
 })
