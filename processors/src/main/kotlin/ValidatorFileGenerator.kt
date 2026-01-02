@@ -16,10 +16,9 @@ class ValidatorFileGenerator(
         classDeclaration: KSClassDeclaration,
         validationFunctions: List<FunSpec>
     ): FileSpec {
-        val className = classDeclaration.simpleName.asString()
         val fileSpecBuilder = FileSpec.builder(
             packageName,
-            "${className}Validator"
+            "${classDeclaration.simpleName.asString()}Validator"
         )
 
         validationFunctions.forEach { fileSpecBuilder.addFunction(it) }

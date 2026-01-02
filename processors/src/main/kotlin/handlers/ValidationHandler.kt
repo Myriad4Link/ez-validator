@@ -7,6 +7,7 @@ import com.squareup.kotlinpoet.FunSpec
 interface ValidationHandler {
     val name: String
         get() = this::class.simpleName!!.removeSuffix("Handler")
+
     fun canProcess(annotation: KSAnnotation): Boolean
     val functionName: String
         get() = "validate${name}"
