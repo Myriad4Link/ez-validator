@@ -1,6 +1,7 @@
 plugins {
     id("buildsrc.convention.kotlin-jvm")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotest)
 }
 
 group = "xyz.uthofficial"
@@ -14,11 +15,9 @@ dependencies {
     ksp(libs.autoServiceKsp)
 
     implementation(project(":annotations"))
-    implementation(project(":errors"))
+    implementation(project(":statuses"))
 
-    testImplementation(libs.junitJupiterApi)
-    testRuntimeOnly(libs.junitJupiterEngine)
-    testRuntimeOnly(libs.junitPlatformLauncher)
+    testImplementation(libs.bundles.kotest)
     testImplementation(libs.kotlinCompileTestingKsp)
     testImplementation(libs.kotlinCompileTestingCore)
     testImplementation(libs.mockk)

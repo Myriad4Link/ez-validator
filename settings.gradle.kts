@@ -25,4 +25,4 @@ rootProject.name = "ez-validator"
 
 include("annotations")
 include("processors")
-include("errors")
+include("statuses")
