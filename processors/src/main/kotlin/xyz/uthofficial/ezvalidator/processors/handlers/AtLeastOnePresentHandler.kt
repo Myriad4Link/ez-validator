@@ -1,6 +1,6 @@
 package xyz.uthofficial.ezvalidator.processors.handlers
 
-import xyz.uthofficial.ezvalidator.states.errors.Ok
+import xyz.uthofficial.ezvalidator.states.Ok
 import arrow.core.Either
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration

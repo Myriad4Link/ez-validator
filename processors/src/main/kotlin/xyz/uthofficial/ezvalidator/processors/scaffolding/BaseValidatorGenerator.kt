@@ -1,4 +1,4 @@
-package xyz.uthofficial.ezvalidator.processors.statics
+package xyz.uthofficial.ezvalidator.processors.scaffolding
 
 import arrow.core.None
 import arrow.core.Option

@@ -52,7 +52,7 @@ class HandlerCompilationResult(
 @OptIn(ExperimentalCompilerApi::class)
 class GeneratorCompilationContext(
     val sourceFiles: List<SourceFile>,
-    val targetClassName: String = "xyz.uthofficial.tests.Test"
+    val targetClassName: String = "xyz.uthofficial.ezvalidator.tests.Test"
 ) {
     private var generatedFileSpec: FileSpec? = null
 
@@ -93,7 +93,7 @@ fun ValidationHandler.testWith(vararg sources: SourceFile, targetClass: String =
 fun ValidatorFileGenerator.testWith(
     funSpecs: List<FunSpec>,
     vararg sources: SourceFile,
-    targetClass: String = "xyz.uthofficial.tests.Test"
+    targetClass: String = "xyz.uthofficial.ezvalidator.tests.Test"
 ) = GeneratorCompilationContext(sources.toList(), targetClass).compileWith(this, funSpecs)
 
 fun String.asSourceFile(name: String = "Test.kt") = SourceFile.kotlin(name, this, true)

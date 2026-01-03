@@ -1,6 +1,6 @@
 package xyz.uthofficial.ezvalidator.processors.handlers
 
-import xyz.uthofficial.ezvalidator.states.errors.Ok
+import xyz.uthofficial.ezvalidator.states.Ok
 import arrow.core.Either
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy

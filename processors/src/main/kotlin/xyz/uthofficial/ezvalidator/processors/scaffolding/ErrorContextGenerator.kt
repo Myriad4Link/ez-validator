@@ -1,4 +1,4 @@
-package xyz.uthofficial.ezvalidator.processors.statics
+package xyz.uthofficial.ezvalidator.processors.scaffolding
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
