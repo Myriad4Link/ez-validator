@@ -5,8 +5,10 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.tschuchort.compiletesting.*
-import handlers.ValidationHandler
+import xyz.uthofficial.ezvalidator.processors.handlers.ValidationHandler
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
+import xyz.uthofficial.ezvalidator.processors.ValidationProcessorProvider
+import xyz.uthofficial.ezvalidator.processors.ValidatorFileGenerator
 
 fun createTestSourceFile(filename: String, content: String): SourceFile =
     SourceFile.kotlin(filename, content, true)

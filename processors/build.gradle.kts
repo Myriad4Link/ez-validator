@@ -15,7 +15,7 @@ dependencies {
     ksp(libs.autoServiceKsp)
 
     implementation(project(":annotations"))
-    implementation(project(":statuses"))
+    implementation(project(":states"))
 
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.kotlinCompileTestingKsp)

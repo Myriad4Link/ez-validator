@@ -1,10 +1,12 @@
+package xyz.uthofficial.ezvalidator.processors
+
 import arrow.core.Either
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.ksp.toClassName
-import errors.ValidationError
-import handlers.toPoetParameterSpecs
+import xyz.uthofficial.ezvalidator.states.errors.ValidationError
+import xyz.uthofficial.ezvalidator.processors.handlers.toPoetParameterSpecs
 
 class ValidatorFileGenerator(
     private val packageName: String

@@ -1,4 +1,4 @@
-package handlers
+package xyz.uthofficial.ezvalidator.processors.handlers
 
 import arrow.core.Option
 import com.google.devtools.ksp.symbol.KSValueParameter

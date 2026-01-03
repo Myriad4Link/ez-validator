@@ -1,27 +1,21 @@
-package statics
+package xyz.uthofficial.ezvalidator.processors.statics
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import errors.ValidationError
+import xyz.uthofficial.ezvalidator.states.errors.ValidationError
 
 class ErrorContextGenerator {
     fun generate(packageName: String) {
         val errorsList = List::class.asClassName().parameterizedBy(
-            ClassName("errors", "ValidationError")
+            ClassName("xyz/uthofficial/ezvalidator/states/errors", "ValidationError")
         )
         val typeE = TypeVariableName("E", ValidationError::class.asClassName()).copy(reified = true)
 
         FileSpec.builder(packageName, "ErrorContext")
             .addType(
                 TypeSpec.classBuilder(ClassName(packageName, "ErrorContext"))
-                    .primaryConstructor(
-                        FunSpec.constructorBuilder()
-                            .addParameter(
-                                "errors",
-                                errorsList
-                            ).build()
-                    )
-                    .addProperty(PropertySpec.builder("errors", errorsList).initializer("errors").build())
+                    .primaryConstructor(generatePrimaryConstructor(errorsList))
+                    .addProperty(generateErrorsProp(errorsList))
                     .addFunction(
                         FunSpec.builder("on")
                             .addTypeVariable(typeE)
@@ -54,4 +48,13 @@ class ErrorContextGenerator {
             )
             .build()
     }
+
+    private fun generateErrorsProp(errorsList: ParameterizedTypeName): PropertySpec =
+        PropertySpec.builder("xyz/uthofficial/ezvalidator/states/errors", errorsList).initializer("xyz/uthofficial/ezvalidator/states/errors").build()
+
+    private fun generatePrimaryConstructor(errorsList: ParameterizedTypeName): FunSpec = FunSpec.constructorBuilder()
+        .addParameter(
+            "xyz/uthofficial/ezvalidator/states/errors",
+            errorsList
+        ).build()
 }

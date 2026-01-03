@@ -1,9 +1,12 @@
+package xyz.uthofficial.ezvalidator.processors
+
+import xyz.uthofficial.ezvalidator.annotations.Validator
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.ksp.writeTo
-import handlers.AtLeastOnePresentHandler
-import handlers.ValidationHandler
+import xyz.uthofficial.ezvalidator.processors.handlers.AtLeastOnePresentHandler
+import xyz.uthofficial.ezvalidator.processors.handlers.ValidationHandler
 
 class ValidationProcessor(
     private val codeGenerator: CodeGenerator,

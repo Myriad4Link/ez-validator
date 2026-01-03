@@ -1,6 +1,6 @@
-package handlers
+package xyz.uthofficial.ezvalidator.processors.handlers
 
-import Ok
+import xyz.uthofficial.ezvalidator.states.errors.Ok
 import arrow.core.Either
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
@@ -8,11 +8,11 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
-import errors.TooLessPresentedError
+import xyz.uthofficial.ezvalidator.states.errors.TooLessPresentedError
 
 class AtLeastOnePresentHandler : ValidationHandler {
     override fun canProcess(annotation: KSAnnotation): Boolean =
-        annotation.annotationType.resolve().declaration.qualifiedName?.asString() == name
+        annotation.annotationType.resolve().declaration.simpleName.asString() == name
 
     override fun process(classDeclaration: KSClassDeclaration): Result<FunSpec> {
         val targetConstructor = classDeclaration.primaryConstructor

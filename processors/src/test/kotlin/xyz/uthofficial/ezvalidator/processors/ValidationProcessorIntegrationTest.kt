@@ -1,7 +1,12 @@
+package xyz.uthofficial.ezvalidator.processors
+
 import arrow.core.Either
 import arrow.core.None
+import arrow.core.Option
 import arrow.core.Some
+import asSourceFile
 import com.tschuchort.compiletesting.KotlinCompilation
+import compileWithProcessor
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -14,10 +19,10 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 class ValidationProcessorIntegrationTest : FunSpec({
     test("should generate factory correctly") {
         val source = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
             
             import arrow.core.Option
-            import AtLeastOnePresent
+            import xyz.uthofficial.ezvalidator.annotations.*
             
             @AtLeastOnePresent
             data class Test(val opt1: Option<String>, val opt2: Option<Int>, val opt3: Option<Double>) {
@@ -26,9 +31,9 @@ class ValidationProcessorIntegrationTest : FunSpec({
        """.trimIndent().asSourceFile()
 
         val consumer = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
             
-            import xyz.uthofficial.tests.Test
+            import xyz.uthofficial.ezvalidator.tests.Test
             import xyz.uthofficial.ezvalidator.ksp.createValidated
             import arrow.core.None
             
@@ -42,9 +47,9 @@ class ValidationProcessorIntegrationTest : FunSpec({
 
     test("should fail compilation on invalid usage") {
         val source = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
             
-            import AtLeastOnePresent
+            import xyz.uthofficial.ezvalidator.annotations.*
             
             @AtLeastOnePresent
             interface TestInterface {
@@ -60,10 +65,10 @@ class ValidationProcessorIntegrationTest : FunSpec({
 
     test("should create instance via factory when valid") {
         val source = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
             
             import arrow.core.Option
-            import AtLeastOnePresent
+            import xyz.uthofficial.ezvalidator.annotations.*
             
             @AtLeastOnePresent
             data class Test(val opt1: Option<String>, val opt2: Option<Int>) {
@@ -78,12 +83,12 @@ class ValidationProcessorIntegrationTest : FunSpec({
         val result =
             compilationResult.classLoader.loadClass("xyz.uthofficial.ezvalidator.ksp.TestValidatorKt").getMethod(
                 "createValidated",
-                compilationResult.classLoader.loadClass($$"xyz.uthofficial.tests.Test$Companion"),
-                arrow.core.Option::class.java,
-                arrow.core.Option::class.java
+                compilationResult.classLoader.loadClass($$"xyz.uthofficial.ezvalidator.tests.Test$Companion"),
+                Option::class.java,
+                Option::class.java
             ).invoke(
                 null,
-                compilationResult.classLoader.loadClass("xyz.uthofficial.tests.Test")
+                compilationResult.classLoader.loadClass("xyz.uthofficial.ezvalidator.tests.Test")
                     .getDeclaredField("Companion")
                     .get(null),
                 Some("valid"),
@@ -92,7 +97,7 @@ class ValidationProcessorIntegrationTest : FunSpec({
 
         result.shouldBeInstanceOf<Either.Right<*>>()
         result.value shouldNotBeNull {
-            javaClass.name shouldBe "xyz.uthofficial.tests.Test"
+            javaClass.name shouldBe "xyz.uthofficial.ezvalidator.tests.Test"
 
             val opt1 = javaClass.getDeclaredMethod("getOpt1").invoke(this)
             val opt2 = javaClass.getDeclaredMethod("getOpt2").invoke(this)
@@ -104,10 +109,10 @@ class ValidationProcessorIntegrationTest : FunSpec({
 
     test("should return error via factory when not valid") {
         val source = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
             
             import arrow.core.Option
-            import AtLeastOnePresent
+            import xyz.uthofficial.ezvalidator.annotations.*
             
             @AtLeastOnePresent
             data class Test(val opt1: Option<String>, val opt2: Option<Int>) {
@@ -122,12 +127,12 @@ class ValidationProcessorIntegrationTest : FunSpec({
         val result =
             compilationResult.classLoader.loadClass("xyz.uthofficial.ezvalidator.ksp.TestValidatorKt").getMethod(
                 "createValidated",
-                compilationResult.classLoader.loadClass($$"xyz.uthofficial.tests.Test$Companion"),
-                arrow.core.Option::class.java,
-                arrow.core.Option::class.java
+                compilationResult.classLoader.loadClass($$"xyz.uthofficial.ezvalidator.tests.Test$Companion"),
+                Option::class.java,
+                Option::class.java
             ).invoke(
                 null,
-                compilationResult.classLoader.loadClass("xyz.uthofficial.tests.Test")
+                compilationResult.classLoader.loadClass("xyz.uthofficial.ezvalidator.tests.Test")
                     .getDeclaredField("Companion")
                     .get(null),
                 None,
@@ -139,7 +144,7 @@ class ValidationProcessorIntegrationTest : FunSpec({
 
         errors shouldHaveSize 1
         val error = errors.first()!!
-        error.javaClass.name shouldBe "errors.TooLessPresentedError"
+        error.javaClass.name shouldBe "xyz.uthofficial.ezvalidator.states.errors.TooLessPresentedError"
 
         error.javaClass.getDeclaredMethod("getRequired").invoke(error) shouldBe 1
         error.javaClass.getDeclaredMethod("getPresented").invoke(error) shouldBe 0

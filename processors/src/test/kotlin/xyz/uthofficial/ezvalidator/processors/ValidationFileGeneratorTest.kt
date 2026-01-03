@@ -1,3 +1,6 @@
+package xyz.uthofficial.ezvalidator.processors
+
+import asSourceFile
 import com.squareup.kotlinpoet.ParameterSpec
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.kotest.core.spec.style.FunSpec
@@ -6,12 +9,13 @@ import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.string.shouldContain
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
+import testWith
 
 @OptIn(ExperimentalCompilerApi::class)
 class ValidationFileGeneratorTest : FunSpec({
     test("should generate correct file spec") {
         val source = """
-            package xyz.uthofficial.tests
+            package xyz.uthofficial.ezvalidator.tests
 
             data class Test(val p0: Int)
         """.trimIndent().asSourceFile()

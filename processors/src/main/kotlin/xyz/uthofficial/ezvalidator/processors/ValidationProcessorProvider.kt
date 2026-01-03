@@ -1,3 +1,5 @@
+package xyz.uthofficial.ezvalidator.processors
+
 import com.google.auto.service.AutoService
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment

@@ -1,4 +1,4 @@
-package handlers
+package xyz.uthofficial.ezvalidator.processors.handlers
 
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration

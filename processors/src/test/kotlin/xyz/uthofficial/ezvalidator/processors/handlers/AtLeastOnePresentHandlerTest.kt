@@ -1,6 +1,6 @@
-package handlers
+package xyz.uthofficial.ezvalidator.processors.handlers
 
-import Ok
+import xyz.uthofficial.ezvalidator.states.errors.Ok
 import arrow.core.Either
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
@@ -8,7 +8,7 @@ import com.squareup.kotlinpoet.asClassName
 import com.tschuchort.compiletesting.*
 import asSourceFile
 import testWith
-import errors.TooLessPresentedError
+import xyz.uthofficial.ezvalidator.states.errors.TooLessPresentedError
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.equals.shouldBeEqual
